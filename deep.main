@@ -1,0 +1,134 @@
+/******************************************************************************
+
+Bridget Naylor
+lab 8 part 3
+
+*******************************************************************************/
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+class pointerDataClass
+{
+  int maxSize;			//variable to store the maximum size of p
+
+  int length;			//variable to store the number of elements in p
+
+  int *p;			// pointer to an int array
+
+  bool original;
+
+public:
+  //Constructor to create an array of the size specified by the parameter size.
+
+    pointerDataClass (int size);
+
+    pointerDataClass (pointerDataClass & object);	//copy constructor
+
+  //Destructor to deallocate the memory space occupied by the array p
+
+   ~pointerDataClass ();
+
+  //the function insertAt inserts num into array p at the position specified by  
+  //index
+
+  void insertAt (int index, int num);
+
+  //The function displayData displays all the array elements in p
+
+  void displayData ();
+
+};
+
+pointerDataClass::pointerDataClass (int size)
+{
+  length = 0;
+  maxSize = size;
+  p = new int[maxSize];
+  original = true;
+
+}
+
+pointerDataClass::pointerDataClass (pointerDataClass &a)
+{
+  cout << "a length " << a.length << " a maxSize " << a.maxSize << endl;
+  this->length = a.length;
+  this->maxSize = a.maxSize;
+  cout << "HERE " << this->length << " maxSize " << maxSize << endl;
+
+
+    //shallow *this = a;
+    //*p = *(d.p); 
+    p = new int[maxSize];
+    // *p = *a.p;
+    //deep
+    for (int i = 0; i < a.length; ++i)
+    {
+        p[i] = a.p[i];
+    }
+        
+
+    original = false;
+}
+
+pointerDataClass::~pointerDataClass ()
+{
+  if (original)
+    {
+      delete[]p;
+    }
+
+}
+
+void
+pointerDataClass::insertAt (int index, int num)
+{
+    if ( index > length)
+    {
+        length = index + 1;
+    }
+    else 
+    {
+        length += 1;
+    }
+    *(p + index) = num;
+  
+    if (length > maxSize)
+    {
+      cout << "Bad length too big" << endl;
+    }
+    else if (length == maxSize)
+    {
+      cout << "Full capacity" << endl;
+    }
+}
+
+void
+pointerDataClass::displayData ()
+{
+  for (int i = 0; i < length; i++)
+    {
+      cout << "Value " << i << " = " << *(p + i) << endl;
+    }
+}
+
+int
+main ()
+{
+  pointerDataClass list1 (10);
+  list1.insertAt (0, 50);
+  list1.insertAt (4, 30);
+  list1.insertAt (8, 60);
+  cout << "List1: length " << endl;
+  list1.displayData ();
+  cout << "List 2: " << endl;
+  pointerDataClass list2 (list1);
+  list2.displayData ();
+  list1.insertAt (4, 100);
+  cout << "List1: (after insert 100 at indext 4) " << endl;
+  list1.displayData ();
+  cout << "List 2: " << endl;
+  list2.displayData ();
+  // list1.get();
+  // list2.get();
+  return 0;
+}
